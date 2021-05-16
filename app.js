@@ -1,23 +1,33 @@
 //Commit
 
+//COUNTS
 let cheese = 0;
 //clickUpgrades
 let pickaxeCount = 0;
 let shovelCount = 0;
 //automaticUpgrades
-let cartCount= 0;
+let cartCount = 0;
 let roverCount = 0;
+
+//MULT
+//clickUpgrades
+let pickaxeMult = 0;
+let shovelMult = 0;
+//automaticUpgrades
+let cartMult = 0;
+let roverMult = 0;
+
 
 
 
 let clickUpgrades = {
-  pickaxe: {
+  'pickaxe': {
     price: 10,
     quantity: 0,
     multiplier: 2
   },
-  
-  shovel: {
+
+  'shovel': {
     price: 10,
     quantity: 0,
     multiplier: 2
@@ -26,74 +36,129 @@ let clickUpgrades = {
 
 
 let automaticUpgrades = {
-  rover, cart: {
+  'rover': {
+    price: 20,
+    quantity: 0,
+    multiplier: 4
+  }
+  ,
+  'cart': {
     price: 20,
     quantity: 0,
     multiplier: 4
   }
 };
-let totalClickUpgrades = clickUpgrades.pickaxe.quantity + clickUpgrades.shovel.quantity;
-let totalAutoUpgrades = automaticUpgrades.cart.quantity + automaticUpgrades.rover.quantity;
+let totalClickUpgrades = 0;
+let totalAutoUpgrades = 0;
 
-function mine(){
-  // if (totalAutoUpgrades == 0 && totalClickUpgrades == 0){
-    cheese++
-  // }
-  //   else{
-  //  clickUpgrades()
-  //  autoUpgrade()
-  // }
-  
-  //alert(cheese)
+function startInterval() {
+  collectionInterval = setInterval(collectAutoUpgrades, 3000);
+}
+
+function mine() {
+  if (totalAutoUpgrades != 0 && totalClickUpgrades != 0) {
+    clUpgrade(choice)
+    autoUpgrade(choice)
+
+  }
+  cheese++
   update()
+
 }
 
 
-function clUpgrade(choice){
-  //console.log("You purchased ", clickUpgrades[choice])
-  
-  if(cheese<totalClickUpgrades.price){
+
+
+function clUpgrade(choice) {
+
+  if (cheese < clickUpgrades[choice].price) {
     console.log("You can't purchase this")
   }
-  else{
+  else if (cheese >= clickUpgrades[choice].price) {
 
-    for(i=0; i<=totalClickUpgrades; i++){
-      cheese = cheese-totalClickUpgrades.price
-      totalClickUpgrades++
-      
-      if(choice == 'pickaxe'){
-        clickUpgrades['pickaxe'].quantity++
-      }
-      else if(choice == 'shovel')
-      {
-        clickUpgrades['shovel'].quantity++
-      }
+
+    console.log("you have " + cheese + "cheese")
+
+    if (choice == 'pickaxe') {
+      clickUpgrades['pickaxe'].quantity++
+      console.log("You have " + clickUpgrades.pickaxe.quantity + " pickaxes")
+      pickaxeCount++
+      pickaxeMult = pickaxeCount * 2
+
+      cheese = cheese - clickUpgrades.pickaxe.price
+      console.log("you have " + cheese + "cheese")
+      clickUpgrades.pickaxe.price++
     }
+    else if (choice == 'shovel') {
+      clickUpgrades['shovel'].quantity++
+      console.log("You have " + clickUpgrades.shovel.quantity + " shovels")
+      shovelCount++
+      shovelMult = shovelCount * 2
+      clickUpgrades.shovel.price++
+
+      cheese = cheese - clickUpgrades.shovel.price
+      console.log("you have " + cheese + "cheese")
+      clickUpgrades.pickaxe.price++
+    }
+    totalClickUpgrades++
+
   }
+  console.log("You have " + totalClickUpgrades + " total click upgrades")
+  //clickUpgrades[choice].quantity++
   update()
 }
 
-function autoUpgrade(){
-  if(cheese<automaticUpgrades.price){
-    return
+function autoUpgrade(choice) {
+
+  if (cheese < automaticUpgrades[choice].price) {
+    console.log("You can't purchase this")
   }
-  
-  for(i=0; i<=totalAutoUpgrades; i++){
-    cheese = cheese-totalAutoUpgrades.price
+  else if (cheese >= automaticUpgrades[choice].price) {
+    //startInterval()
+
+    //this will iterate over the automaticUpgrades, total the quantity of each automaticUpgrade times their multiplier, and add that value to the cheese resource.
+    if (choice == 'cart') {
+      automaticUpgrades['cart'].quantity++
+      console.log("You have " + automaticUpgrades.cart.quantity + " carts")
+      cartCount++
+      cartMult = cartCount * 4
+
+      cheese = cheese - automaticUpgrades.cart.price
+      console.log("You have " + cheese + " cheese")
+      automaticUpgrades.cart.price = automaticUpgrades.cart.price + 2
+
+    }
+    else if (choice == 'rover') {
+      automaticUpgrades['rover'].quantity++
+      console.log("You have " + automaticUpgrades.rover.quantity + " rovers")
+      roverCount++
+      roverMult = roverCount * 4
+
+      cheese = cheese - automaticUpgrades.rover.price
+      console.log("You have " + cheese + " cheese")
+      automaticUpgrades.rover.price = automaticUpgrades.rover.price + 2
+    }
+
     totalAutoUpgrades++
-    update()
+    console.log("You have " + totalAutoUpgrades + " total click upgrades")
+
   }
+
+  //automaticUpgrades[choice].quantity++
+  update()
 }
 
 //prints new values to screen
-function update(){
+function update() {
+
+  //VALUES
   let cheeseElm = document.getElementById('cheese-mined')
   cheeseElm.innerText = cheese
 
   //clickUpgrades
   let pickaxeElm = document.getElementById('pickaxe')
   pickaxeElm.innerText = pickaxeCount
-  
+
   let shovelElm = document.getElementById('shovel')
   shovelElm.innerText = shovelCount
 
@@ -103,5 +168,21 @@ function update(){
 
   let roverElm = document.getElementById('rover')
   roverElm.innerText = roverCount
+
+  //MULTIPLIERS
+  //clickUpgrades
+  let pickaxeMultElm = document.getElementById('pickaxe-mult')
+  pickaxeMultElm.innerText = pickaxeMult
+
+  let shovelMultElm = document.getElementById('shovel-mult')
+  shovelMultElm.innerText = shovelMult
+
+  //autoUpgrades
+  let cartMultElm = document.getElementById('cart-mult')
+  cartMultElm.innerText = cartMult
+
+  let roverMultElm = document.getElementById('rover-mult')
+  roverMultElm.innerText = roverMult
+
 }
 
