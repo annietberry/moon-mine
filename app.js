@@ -55,13 +55,18 @@ let totalUp = 0;
 
 // First create a method called collectAutoUpgrades, this will iterate over the automaticUpgrades, total the quantity of each automaticUpgrade times their multiplier, and add that value to the cheese resource. (See example below)
 
-collectAutoUpgrades()
+
 
 // We want this to happen automatically, so we will need to use setInterval (reference) to make sure this occurs every three seconds automatically, we can set this automatic invocation like so:
-
-// function startInterval() {
-//   collectionInterval = setInterval(collectAutoUpgrades, 3000);
-// }
+function collectAutoUpgrades() {
+  let autoIncrement = totalAutoUpgrades * automaticUpgrades.rover.multiplier
+  cheese = cheese + autoIncrement
+  update()
+}
+function startInterval() {
+  collectionInterval = setInterval(collectAutoUpgrades, 3000);
+  update()
+}
 
 function mine() {
   if (totalAutoUpgrades != 0 || totalClickUpgrades != 0) {
@@ -135,7 +140,7 @@ function buyCart(cart) {
 
     totalAutoUpgrades++
     console.log("You have " + totalAutoUpgrades + " total click upgrades")
-
+    startInterval()
   }
 
   update()
@@ -160,6 +165,7 @@ function buyRover(rover) {
 
     totalAutoUpgrades++
     console.log("You have " + totalAutoUpgrades + " total click upgrades")
+    startInterval()
   }
 
   update()
